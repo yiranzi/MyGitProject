@@ -1,7 +1,16 @@
 /**
+ * 1输入
+ * 2点击确定后检测数据合理性
+ * 3录入数据或者是要求重新输入
+ * 4在数据表中新增一个条目
+ * 5将新增条目刷新
+ * 6如果删除某一个条目
+ * 7在数据表中.移除掉这个条目.根据编号.
+ * 5删除制定条目
  * aqiData，存储用户输入的空气指数数据
  * 示例格式：
  * aqiData = {
+ *
  *    "北京": 90,
  *    "上海": 40
  * };
@@ -34,8 +43,9 @@ function renderAqiList() {
     if(aqiData.length == 1)
     {
         nodeTr = document.createElement("tr");
+
         nodeFather = document.getElementById("aqi-table");
-         nodeFather = nodeFather.appendChild(nodeTr);
+        nodeFather = nodeFather.appendChild(nodeTr);
         for(var i = 0;i<3;i++)
         {
             nodeTr = document.createElement("td");
@@ -48,10 +58,21 @@ function renderAqiList() {
     else
     {
         nodeTr = document.createElement("tr");
+        nodeTr.iIndex = aqiData.length;
         nodeFather = document.getElementById("aqi-table");
         nodeFather = nodeFather.appendChild(nodeTr);
-
+        for(var i = 0;i<3;i++)
+        {
+            nodeTr = document.createElement("td");
+            nodeFather.appendChild(nodeTr);
+        }
+        nodeFather.children[0].innerHTML = aqiData[aqiData.length-1][1];
+        nodeFather.children[1].innerHTML = aqiData[aqiData.length-1][2];
+       // node
+        //nodeFather.children[2].appendChild()
+         //   .innerHTML = <button>删除</button>;
     }
+    console.log(nodeTr.iIndex);
 
 
 
