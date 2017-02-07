@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" type="text/css" href="mystyle.css"></link>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #div1{
+            display:none;
+            background-color: blue;
+            width:100px;
+            height:100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>焦点</h1>
+    <p>onfocus,onblur</p>
+
+    <h1>event对象</h1>
+    <p class="demo">event 获取</p>
+    <p class="exer">跟随鼠标</p>
+
+    <h1>事件冒泡</h1>
+    <p>ev.cancelBubble = true</p>
+    <button id="btn1">防select控件</button>
+    <p class="error">如何能够将参数传递到listener中呢?我记得可以放在colick中</p>
+    <div id="div1">ev.cancelBubble = true</div>
+
+    <h1>事件传递的不同方式</h1>
+    <h2>普通事件和绑定事件的区别</h2>
+    <h2>绑定事件兼容性</h2>
+    <p>ie使用attachEvent和detechEvent 并且名称为onclick</p>
+    <p>Ie下需要注意的，执行顺序、this指向</p>
+    <h2>取消绑定</h2>
+
+    <h1>键盘事件</h1>
+    <h2>keycode</h2>
+    <h2>其他属性ctrlKey shiftKey altKey</h2>
+
+    <h1>默认事件</h1>
+    <h2>what is</h2>
+    <h2>如何屏蔽默认事件</h2>
+    <p>return false</p>
+</body>
+
+<script>
+    /*
+    自动添加编号
+    */
+    function addNumber()
+    {
+        var h1s = document.getElementsByTagName("h2");
+        for(var i =0;i<h1s.length;i++)
+        {
+            var txt = h1s[i].innerHTML;
+            h1s[i].innerHTML = i+ 1 + ". " +txt;
+        }
+    }
+    /*
+    event 对象
+    */
+    document.onclick = function (ev) {
+
+        ev = ev || window.event;
+        var x = ev.clientX;
+        var y = ev.clientY;
+        console.log(x,y);
+        alert(x,y);
+
+    }
+    /*
+    取消冒泡
+     添加一个监控并且尝试阻止冒泡的bug
+     */
+    var btn1 = document.getElementById("btn1");
+    btn1.onclick = function(){
+
+        var div1 = document.getElementById("div1");
+        //console.log(div1.innerHTML);
+        //console.log(div1.style);
+        div1.style.display = "block";
+        alert("1");
+    }
+
+    function HideDiv(ev)
+    {
+        ev = ev || window.event;
+        console.log(ev.cancelBubble);
+        ev.cancelBubble = true;
+        console.log(ev.cancelBubble);
+        var o = this.myValue;
+        console.log("hide"+ o);
+        o.style.display = "none";
+    }
+
+    document.myValue = div1;
+    document.addEventListener("click",HideDiv,false);
+
+    var btn2 = document.createElement("button");
+    document.body.appendChild(btn2);
+    btn2.addEventListener("click",function(){
+        btn1.onclick = null;
+        document.onclick = null;
+        document.removeEventListener("click",HideDiv,false);
+    },false)
+</script>
+<script>
+    addNumber();
+</script>
+</html>
