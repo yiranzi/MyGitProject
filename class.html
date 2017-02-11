@@ -12,17 +12,48 @@
             width:100px;
             height:100px;
         }
+
+        .div1{
+            position:absolute;
+            display:none;
+            width:10px;
+            height:10px;
+            background-color: red;
+        }
+
     </style>
 </head>
 <body>
     <h1>焦点</h1>
-    <p>onfocus,onblur</p>
+    <p>focus,blur,onfocus,onblur</p>
+    <p>不是所有事件都有焦点</p>
+    <p class = "error">如何让焦点事件进行绑定</p>
+    <p class="demo">输入框</p>
+    <p>select可以选中所有的</p>
+    <input id = "name"type="text"/>
+    <input id = "age" type = "text"/>
 
     <h1>event对象</h1>
+    <p class="problem">event对象是什么.查询一下</p>
+
+
     <p class="demo">event 获取</p>
-    <p class="exer">跟随鼠标</p>
+    <p class="demo">跟随鼠标</p>
+    <p>当时间发生的时候,所有的信息都会保存到event中.
+    只有事件调用函数的内部event才有.event是一个内置的全局变量(意思是..).
+    </p>
+    <p class="problem">event是如何记录下来这些信息的</p>
+    <p>onmousemove单位时间内,如果鼠标位置发生变化,那么就触发一次
+    还有一个scrolltop
+    </p>
 
     <h1>事件冒泡</h1>
+    <p class="note">我.on马路边捡到一分钱 = function 交给警察叔叔.对象.事件名称 = 执行方法</p>
+    <P class="note">冒泡的价值在于,页面中的元素,可以通过这种消息机制,遍历所有的元素,执行该执行的内容.
+    或者是,文档中任何元素接受到事件,但是事件不做事情(btw 其实每个元素上都有onclick 只不过里面没有内容而已.)冒泡给最上面,统一执行.
+    这块理解的还有问题.参考了一些资料,但还不是很明确.
+    </P>
+    <p class="work">这块需要去查一下,并且看下百度的要求,而且要做一些测试.深入理解一下.最主要的就是,父级事件绑定,是如何正确获取到子集</p>
     <p>ev.cancelBubble = true</p>
     <button id="btn1">防select控件</button>
     <p class="error">如何能够将参数传递到listener中呢?我记得可以放在colick中</p>
@@ -33,6 +64,15 @@
     <h2>绑定事件兼容性</h2>
     <p>ie使用attachEvent和detechEvent 并且名称为onclick</p>
     <p>Ie下需要注意的，执行顺序、this指向</p>
+    <P class="note">ie和非ie的事件处理函数中的this指向并不一样
+    非IE是指向触发事件的对象.(哦)
+        ie似乎是指向最上层的元素?
+    </P>
+    <p class="note">call是定义一个函数的时候就有的方法
+    function.call(自定义this如果为null则不改变,参数列表)
+    </p>
+    <p class="note">捕获和冒泡的区别.事件捕获是从最上层到事件点,事件点再返回最上层.注意,不会往更下层传递,一旦捕获就反弹了
+    点击会触发两次onclick.后面的true和false是来区分监控的是进来的开始出去的.</p>
     <h2>取消绑定</h2>
 
     <h1>键盘事件</h1>
@@ -46,6 +86,58 @@
 </body>
 
 <script>
+    /*
+    */
+
+
+    /*
+    焦点
+    */
+    var oName = document.getElementById("name");
+    oName.value = "请输入内容";
+    var oAge = document.getElementById("age");
+    console.log(oName);
+    console.log(oAge);
+
+    oName.onfocus = function(){
+
+        oAge.value = "on focus";
+        console.log(this.value);
+        if(this.value == "请输入内容")
+        {
+            this.value = "";
+        }
+
+    }
+    oName.onblur = function () {
+        if(this.value == "")
+        {
+            this.value = "请输入内容";
+        }
+        oAge.value = "on blur";
+    }
+    oAge.focus();
+
+    /*
+    鼠标移动跟随
+    */
+    var i = 0;
+
+    function WhenMove(ev) {
+        var div = document.createElement("div");
+        document.body.appendChild(div);
+        var x =ev.clientX;
+        var y =ev.clientY;
+        div.innerHTML = x;
+        div.className = "div1";
+        div.style.display = "block";
+        var scrollTop = document.body.scrollTop;
+        var scrollLeft = document.body.scrollLeft;
+        div.style.left = scrollLeft +x+"px";
+        div.style.top = scrollTop + y+"px";
+        console.log(div.style)
+        document.title = i++;
+    }
     /*
     自动添加编号
     */
@@ -66,8 +158,8 @@
         ev = ev || window.event;
         var x = ev.clientX;
         var y = ev.clientY;
-        console.log(x,y);
-        alert(x,y);
+        //console.log('x坐标是' + x +"y坐标是" + y);
+        //alert('x坐标是' + x +"y坐标是" + y);
 
     }
     /*
@@ -75,29 +167,27 @@
      添加一个监控并且尝试阻止冒泡的bug
      */
     var btn1 = document.getElementById("btn1");
-    btn1.onclick = function(){
-
+    btn1.onclick = function(ev){
+        ev = ev || event;
         var div1 = document.getElementById("div1");
-        //console.log(div1.innerHTML);
-        //console.log(div1.style);
         div1.style.display = "block";
-        alert("1");
+        ev.cancelBubble = true;
     }
 
-    function HideDiv(ev)
+    function HideDiv(ev,mywant)
     {
+        //alert(mywant);
         ev = ev || window.event;
-        console.log(ev.cancelBubble);
-        ev.cancelBubble = true;
-        console.log(ev.cancelBubble);
+
         var o = this.myValue;
-        console.log("hide"+ o);
         o.style.display = "none";
     }
 
     document.myValue = div1;
-    document.addEventListener("click",HideDiv,false);
-
+    document.addEventListener("click",function(),false);
+    /*
+    取消掉事件绑定
+     */
     var btn2 = document.createElement("button");
     document.body.appendChild(btn2);
     btn2.addEventListener("click",function(){
@@ -108,5 +198,6 @@
 </script>
 <script>
     addNumber();
+    //document.onmousemove = WhenMove;
 </script>
 </html>

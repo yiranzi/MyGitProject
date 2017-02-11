@@ -18,19 +18,41 @@
 <h1>13.1 事件流</h1>
 <h2>事件冒泡</h2>
 <p>事件捕捉和事件冒泡</p>
+
 <h1>13.2 事件处理程序</h1>
 <h2>html</h2>
 <p>直接在html添加onclick 值为js</p>
 <button value = "find me"onclick = 'alert(value);alert("这个数值是js,所以可以在js中通过onclick = fucntion(){}或者在style中通过onclick = /functionname()/来实现");
 alert(this.onclick);
-alert(event.type);'></button>
+alert(event.type);
+for(var attrOW in event)
+{
+    console.log(attr + "=" + event[attr]);
+}'></button>
+
 <h2>dom0</h2>
 <p>在js中添加onclick</p>
-<h2>dom2</h2>
-<p>addEventListener(事件名称/事件处理程序等函数/布尔值false为冒泡)</p>
-<h1>event对象</h1>
-<p class="demo">event 获取</p>
-<p class="exer">跟随鼠标</p>
+
+<h1>13.3 事件对象</h1>
+<h2>dom中的事件对象 </h2>
+<p>只有在事件处理函数的执行期间,event对象才会存在.一旦事件结束,就会被销毁.不知道这个东西能不能被保留下来.</p>
+<p>无论什么事件方法.都可以传入第一个参数,作为ev到事件处理函数中.</p>
+<p >target 接受到事件的东西
+this和event.currenttarget 事件处理函数所在的地方</p>
+<p class="work">可以使用event.type来让同一个事件处理函数相应不同的操作类型</p>
+<p>event.preventDefault可以用于阻止默认的行为
+event.stopPropagation可以用于阻止捕获或者冒泡的继续发生</p>
+<p>event.phase可以获取所处的阶段</p>
+
+<h2>ie中的event</h2>
+<p>ie中的event不是作为参数传入到事件处理函数中的.而是在window对象中获取的.</p>
+<p>简单介绍了下在ie中的情况.基本上一致</p>
+
+<h2>兼容性处理</h2>
+<p>1.getTarget
+在ie中</p>
+<p class="work">有空可以尝试一下这些兼容性设置.</p>
+
 
 
 
@@ -50,9 +72,11 @@ alert(event.type);'></button>
         }
     }
     /*
-     event 对象
+     event 兼容
      */
     document.onclick = function (ev) {
+        //event = EventUtil.getEvent(event);//返回对event对象的引用
+        //getTarget(event) 返回目标事件
         ev = ev || window.event;
         var x = ev.clientX;
         var y = ev.clientY;

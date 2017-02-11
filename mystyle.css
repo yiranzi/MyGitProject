@@ -1,11 +1,30 @@
+p{
+    /*原有的内容*/
+    color:cadetblue;
+}
+
+.note{
+    /*记录课堂笔记*/
+    color:black;
+}
+
+
 .demo{
+    /*完成了的演示*/
     color:green;
 }
 
-.exer{
+.work{
+    /*//要做的东西*/
     color:orange;
 }
 
 .error{
+    /*//课后讲了但是不会的存疑的东西*/
     color:red;
+}
+
+.problem{
+    /*//要查的东西*/
+    color:mediumblue;
 }
